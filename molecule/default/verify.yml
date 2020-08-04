@@ -4,4 +4,36 @@
   hosts: molecule_hosts
   gather_facts: no
   tasks:
-    - debug: msg="Verify to be done"
+    - name: Search Check_MK agent config directory
+      stat:
+        path: "{{ check_mk_agent_disk_config_dir }}"
+      register: search_config_dir_result
+      loop:
+        - /etc/check_mk
+        - /etc/check-mk-agent
+      loop_control:
+        loop_var: check_mk_agent_disk_config_dir
+        label: "{{ check_mk_agent_disk_config_dir }}"
+
+    - name: Read Check_MK agent disks config file
+      command: "cat {{ config_path }}"
+      register: read_config_result
+      changed_when: no
+      vars:
+        config_path: >-
+          {{ (search_config_dir_result.results
+              | selectattr("stat.exists", "equalto", true)
+              | selectattr("stat.isdir", "equalto", true)
+              | list
+              | last).stat.path }}/mrpe.cfg
+
+    - name: Test disk check
+      command: "{{ read_config_result.stdout_lines
+                   | first
+                   | regex_replace('(.*) (/.*)$', '\\2') }}"
+      changed_when: no
+      register: check_result
+
+    - name: Assert check output is ok
+      assert:
+        that: check_result.stdout is search("DISK OK")

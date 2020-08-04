@@ -1,0 +1,56 @@
+{% set ns=namespace(args=[]) %}
+
+{% macro string_arg(field) %}
+{% if check_mk_agent_disk_item[field] | default("") | length > 0 %}
+{% set ns.args = ns.args
+                 + ["--"
+                    + field
+                    + "="
+                    + check_mk_agent_disk_item[field] | string] %}
+{% endif %}
+{% endmacro %}
+
+{% macro bool_arg(field) %}
+{% if check_mk_agent_disk_item[field] is defined
+   and check_mk_agent_disk_item[field] | bool %}
+{% set ns.args = ns.args + ["--" + field] %}
+{% endif %}
+{% endmacro %}
+
+{{ string_arg("warning") }}
+{{ string_arg("critical") }}
+{{ bool_arg("combined_thresholds") }}
+{{ string_arg("iwarning") }}
+{{ string_arg("icritical") }}
+{{ string_arg("extra_options") }}
+{{ string_arg("exclude_device") }}
+{{ bool_arg("exact_match") }}
+{{ bool_arg("errors_only") }}
+{{ bool_arg("freespace_ignore_reserved") }}
+{{ string_arg("group") }}
+{{ bool_arg("human") }}
+{{ bool_arg("kilobytes") }}
+{{ bool_arg("local") }}
+{{ bool_arg("skip_fake_fs") }}
+{{ bool_arg("inode_perfdata") }}
+{{ bool_arg("stat_remote_fs") }}
+{{ bool_arg("mountpoint") }}
+{{ bool_arg("megabytes") }}
+{{ bool_arg("all") }}
+{{ string_arg("eregi_path") }}
+{{ string_arg("eregi_partition") }}
+{{ string_arg("ereg_path") }}
+{{ string_arg("ereg_partition") }}
+{{ string_arg("ignore_eregi_path") }}
+{{ string_arg("ignore_eregi_partition") }}
+{{ string_arg("ignore_ereg_path") }}
+{{ string_arg("ignore_ereg_partition") }}
+{{ string_arg("timeout") }}
+{{ string_arg("units") }}
+{{ string_arg("exclude_type") }}
+{{ string_arg("include_type") }}
+{{ bool_arg("newlines") }}
+{{ string_arg("path") }}
+{{ string_arg("partition") }}
+
+{{- ns.args | join(" ") -}}

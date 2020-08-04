@@ -1,2 +1,29 @@
 ---
 # Role tasks
+
+- name: Search Check_MK agent config directory
+  stat:
+    path: "{{ check_mk_agent_disk_config_dir }}"
+  register: check_mk_agent_disk_search_config_dir_result
+  loop:
+    - /etc/check_mk
+    - /etc/check-mk-agent
+  loop_control:
+    loop_var: check_mk_agent_disk_config_dir
+    label: "{{ check_mk_agent_disk_config_dir }}"
+
+- name: Setup Check_MK agent disk checks
+  lineinfile:
+    path: "{{ check_mk_agent_disk_mpre_config_path }}"
+    regexp: "^{{ check_mk_agent_disk_item.name }} "
+    line: >-
+      {{ check_mk_agent_disk_item.name }}
+      /usr/lib64/nagios/plugins/check_disk
+      {{ lookup("template", "args.j2") | trim }}
+    create: yes
+  loop: "{{ check_mk_agent_disk_list }}"
+  loop_control:
+    loop_var: check_mk_agent_disk_item
+    label: "{{ check_mk_agent_disk_item.name }}"
+  tags:
+    - role::check_mk_agent_disk

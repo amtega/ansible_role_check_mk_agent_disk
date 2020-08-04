@@ -1,2 +1,46 @@
 ---
 # Role default lower priority variables
+
+# List of dicts with the disk checks. Each dictionary could contain the
+# following fields. See /usr/lib64/nagios/plugins/check_disk --help for details
+#
+# {
+#   name: <name>              # This is the name of the check and it's required
+#   path: <path>
+#   partition: <partition>
+#   warning: <warning_level>
+#   critical: <critical_level>
+#   combined_thresholds: <yes_no>
+#   iwarning: <percentage>
+#   icritical: <percentage>
+#   extra_options: <section@file>
+#   exclude_device: <path>
+#   exact_match: <yes_no>
+#   errors_only: <yes_no>
+#   freespace_ignore_reserved: <yes_no>
+#   group: <name>
+#   human: <yes_no>
+#   kilobytes: <yes_no>
+#   local: <yes_no>
+#   skip_fake_fs: <yes_no>
+#   inode_perfdata: <yes_no>
+#   stat_remote_fs: <yes_no>
+#   mountpoint: <yes_no>
+#   megabytes: <yes_no>
+#   all: <yes_no>
+#   eregi_path: <path>
+#   eregi_partition: <partition>
+#   ereg_path: <path>
+#   ereg_partition: <partition>
+#   ignore_eregi_path: <path>
+#   ignore_eregi_partition: <partition>
+#   ignore_ereg_path: <path>
+#   ignore_ereg_partition: <partition>
+#   timeout: <integer>
+#   units: <units>
+#   exclude_type: <type>
+#   include_type: <type>
+#   newlines: <yes_no>
+# }
+
+check_mk_agent_disk_list: []

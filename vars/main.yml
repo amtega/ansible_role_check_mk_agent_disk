@@ -1,2 +1,9 @@
 ---
 # Role variables
+
+check_mk_agent_disk_mpre_config_path: >-
+  {{ (check_mk_agent_disk_search_config_dir_result.results
+      | selectattr("stat.exists", "equalto", true)
+      | selectattr("stat.isdir", "equalto", true)
+      | list
+      | last).stat.path }}/mrpe.cfg

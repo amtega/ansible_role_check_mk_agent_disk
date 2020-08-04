@@ -61,6 +61,11 @@ provisioner:
     hosts:
       molecule_hosts:
         vars:
+          check_mk_agent_disk_list:
+            - name: root
+              path: /
+              warning: 10%
+              critical: 5%
       molecule_hosts_fedora:
         vars:
           ansible_python_interpreter: /usr/bin/python3

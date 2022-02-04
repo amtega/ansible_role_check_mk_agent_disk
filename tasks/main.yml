@@ -21,6 +21,7 @@
       /usr/lib64/nagios/plugins/check_disk
       {{ lookup("template", "args.j2") | trim }}
     create: yes
+    mode: 0644
   loop: "{{ check_mk_agent_disk_list }}"
   loop_control:
     loop_var: check_mk_agent_disk_item
